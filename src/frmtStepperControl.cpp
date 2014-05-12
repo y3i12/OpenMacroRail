@@ -26,19 +26,22 @@ void frmtStepperControl::step( int theNumberOfSteps )
     return;
   }
 
+  int direction = 1;
+
+  if ( theNumberOfSteps < 0 )
+  {
+    direction = -1;
+    theNumberOfSteps = abs( theNumberOfSteps );
+  }
+
   for ( int i = 0; i < theNumberOfSteps; ++i )
   {
     stepLogic( ARD_LOW );
-    m_arduino.update();
 
-    m_currentStep = ( m_currentStep + 1 ) % 8;
+    m_currentStep = ( m_currentStep + direction + 8 ) % 8;
     
     stepLogic( ARD_HIGH );
-
-    // update the output
-    m_arduino.update();
   }
-  ofLogNotice() << "---------------------";
 }
 
 void frmtStepperControl::lock( bool doUpdate )
@@ -58,11 +61,6 @@ void frmtStepperControl::unlock( bool doUpdate )
 {
   release( false );
   stepLogic( ARD_HIGH );
-
-  if ( doUpdate )
-  {
-    m_arduino.update();
-  }
 }
 
 void frmtStepperControl::release( bool doUpdate )
@@ -70,11 +68,6 @@ void frmtStepperControl::release( bool doUpdate )
   for ( auto pin : m_stepperPins )
   {
     m_arduino.sendDigital( m_stepperPins[ pin ], ARD_LOW );
-  }
-
-  if ( doUpdate )
-  {
-    m_arduino.update();
   }
 }
 
@@ -86,15 +79,11 @@ void frmtStepperControl::stepLogic( int value )
   }
 
   // the main step
-  ofLogNotice() << "Setting pin " << ( m_currentStep / 2 ) << " to " << ( value ? "HIGH" : "LOW" );
   m_arduino.sendDigital( m_stepperPins[ m_currentStep / 2 ], value );
-  m_arduino.update();
     
   // the half step
   if ( m_currentStep % 2 )
   {
-    ofLogNotice() << "Setting pin " << ( ( ( m_currentStep / 2 ) + 1 ) % 4 ) << " to " << ( value ? "HIGH" : "LOW" );
-    m_arduino.sendDigitalPinMode( m_stepperPins[ ( ( m_currentStep / 2 ) + 1 ) % 4 ], value );
-    m_arduino.update();
+    m_arduino.sendDigital( m_stepperPins[ ( ( m_currentStep / 2 ) + 1 ) % 4 ], value );
   }
 }

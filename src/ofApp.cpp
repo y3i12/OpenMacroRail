@@ -136,11 +136,6 @@ void ofApp::exit( )
 
 void ofApp::guiEvent( ofxUIEventArgs &e )
 {
-    if( e.getName() == "BACKGROUND" )
-    {
-        ofxUISlider *slider = e.getSlider( );
-        ofBackground( slider->getScaledValue( ) );
-    }
 }
 
 //--------------------------------------------------------------
@@ -158,6 +153,7 @@ void ofApp::setupArduino( const int & version )
   ofLogNotice() << m_arduino.getFirmwareName(); 
   ofLogNotice() << "firmata v" << m_arduino.getMajorFirmwareVersion() << "." << m_arduino.getMinorFirmwareVersion();
         
+  // initialize the arduino pins to control the step motor and the camera
   for ( auto pin : m_stepperPins )
   {
     m_arduino.sendDigitalPinMode( pin, ARD_OUTPUT );
@@ -169,8 +165,8 @@ void ofApp::setupArduino( const int & version )
   }
   
   // Listen for changes on the digital and analog pins
-  ofAddListener( m_arduino.EDigitalPinChanged, this, &ofApp::digitalPinChanged );
-  ofAddListener( m_arduino.EAnalogPinChanged,  this, &ofApp::analogPinChanged  );    
+  //ofAddListener( m_arduino.EDigitalPinChanged, this, &ofApp::digitalPinChanged );
+  //ofAddListener( m_arduino.EAnalogPinChanged,  this, &ofApp::analogPinChanged  );    
 }
 
 //--------------------------------------------------------------
@@ -185,7 +181,7 @@ void ofApp::updateArduino( )
   // do not send anything until the arduino has been set up
   if ( m_setupArduino ) 
   {
-    m_stepperControl->step( );
+    m_stepperControl->step( -1 );
     Sleep( 300 );
   }
 }
