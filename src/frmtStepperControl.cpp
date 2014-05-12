@@ -36,11 +36,9 @@ void frmtStepperControl::step( int theNumberOfSteps )
 
   for ( int i = 0; i < theNumberOfSteps; ++i )
   {
-    stepLogic( ARD_LOW );
-
     m_currentStep = ( m_currentStep + direction + 8 ) % 8;
     
-    stepLogic( ARD_HIGH );
+    stepLogic( direction );
   }
 }
 
@@ -60,7 +58,7 @@ void frmtStepperControl::lock( bool doUpdate )
 void frmtStepperControl::unlock( bool doUpdate )
 {
   release( false );
-  stepLogic( ARD_HIGH );
+  stepLogic( );
 }
 
 void frmtStepperControl::release( bool doUpdate )
@@ -71,19 +69,24 @@ void frmtStepperControl::release( bool doUpdate )
   }
 }
 
-void frmtStepperControl::stepLogic( int value )
+void frmtStepperControl::stepLogic( int theDirection )
 {
   if ( m_currentStep < 0 || m_currentStep >= 8 )
   {
     return;
   }
-
+  
   // the main step
-  m_arduino.sendDigital( m_stepperPins[ m_currentStep / 2 ], value );
+  m_arduino.sendDigital( m_stepperPins[ m_currentStep / 2 ], ARD_HIGH );
     
   // the half step
   if ( m_currentStep % 2 )
   {
-    m_arduino.sendDigital( m_stepperPins[ ( ( m_currentStep / 2 ) + 1 ) % 4 ], value );
+    m_arduino.sendDigital( m_stepperPins[ ( ( m_currentStep / 2 ) + 1 ) % 4 ], ARD_HIGH );
+  }
+  else if ( theDirection != 0 )
+  {
+    // the main step
+    m_arduino.sendDigital( m_stepperPins[ ( m_currentStep / 2 - theDirection + 4 ) % 4 ], ARD_LOW );
   }
 }

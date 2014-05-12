@@ -22,7 +22,7 @@ public:
    int                  m_currentStep;
 
 private:
-  void stepLogic( int value );
+  void stepLogic( int theDirection = 0 );
 };
 
 #endif
