@@ -1,8 +1,12 @@
-#pragma once
+#if !defined __OF_APP_H__
+#define __OF_APP_H__
+
+#include <vector>
 
 #include "ofMain.h"
 #include "ofxUI.h"
-#include <vector>
+
+#include "frmtStepperControl.h"
 
 class ofApp : public ofBaseApp
 {
@@ -37,5 +41,8 @@ public:
     float                m_shotNumber;
     float                m_stepNumber;
     std::vector< int >   m_stepperPins;
+    frmtStepperControl*  m_stepperControl;
     std::vector< int >   m_cameraPins;
 };
+
+#endif

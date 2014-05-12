@@ -29,6 +29,9 @@ void ofApp::setup()
 
   m_cameraPins.push_back( 12 );
   m_cameraPins.push_back( 13 );
+  
+  // create the stepper controller
+  m_stepperControl = new frmtStepperControl( m_stepperPins, m_arduino );
 
   m_setupArduino  = false;  // flag so we setup arduino when its ready, you don't need to touch this :)
   
@@ -126,6 +129,7 @@ void ofApp::exit( )
 {
     m_gui->saveSettings( "settings.xml" );
     delete m_gui; 
+    delete m_stepperControl;
 }
 
 //--------------------------------------------------------------
@@ -181,17 +185,8 @@ void ofApp::updateArduino( )
   // do not send anything until the arduino has been set up
   if ( m_setupArduino ) 
   {
-    for ( int i = 0; i < 4; ++i )
-    {
-      m_arduino.sendDigital( m_stepperPins[ i ], ARD_HIGH );
-      m_arduino.sendDigital( m_cameraPins[ i % 2 ], ARD_HIGH );
-      m_arduino.update( );
-      Sleep( 100 );
-      m_arduino.sendDigital( m_stepperPins[ i ], ARD_LOW );
-      m_arduino.sendDigital( m_cameraPins[ i % 2 ], ARD_LOW );
-      m_arduino.update( );
-      Sleep( 100 );
-    }
+    m_stepperControl->step( );
+    Sleep( 300 );
   }
 }
 
