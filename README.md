@@ -22,9 +22,6 @@ The main flow is something like this:
 Set the parameters on the OpenFrameworks UI and click "Lets shoot this thing.", the UI through OF communicates to the Arduino using Firmata, shoots the camera and moves it repeatedly until all the slices are all shot.
 
 #Next steps
-* Unipolar Stepper motor controling with half-step motion using firmata protocol;
-* Bind the UI parameters to the real actions;
-* Route the PCB;
 * Etch and test the PCB;
 * Create 3D-Printable parts to the case;
 
