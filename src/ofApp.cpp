@@ -9,7 +9,7 @@ void ofApp::setup()
   
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
   // UI CREATION
-  m_gui = new ofxUICanvas( );
+  m_gui = new ofxUICanvas( 512.0f );
   
   ofxUISlider* aSlider = 0;
 
@@ -54,8 +54,16 @@ void ofApp::setup()
   m_focusTime = 0.0f;
   aSlider = m_gui->addSlider( "Autofocus time", 0.0f, 5.0f, &m_focusTime );
 
+  // do it button, status and exit
   m_gui->addSpacer();
-  m_doIt = m_gui->addButton( "Just Do It!", false );
+  m_doItTriggered = false;
+  m_doIt = m_gui->addButton( "Just Do It!", &m_doItTriggered );
+  
+  m_gui->addSpacer();
+  m_status = m_gui->addLabel( "Status", "STATUS: Waiting for action..." );
+  
+  m_gui->addSpacer();
+  m_exitButton = m_gui->addButton( "Quit", false );
 
   m_gui->autoSizeToFitWidgets( ); 
   ofAddListener( m_gui->newGUIEvent, this, &ofApp::guiEvent ); 
@@ -176,9 +184,13 @@ void ofApp::exit( )
 
 void ofApp::guiEvent( ofxUIEventArgs &e )
 {
-  if ( m_doIt == e.widget )
+  if ( m_doIt == e.widget && m_doItTriggered )
   {
     doTheShootingSequence();
+  }
+  else if ( m_exitButton == e.widget )
+  {
+    ofExit();
   }
 }
 

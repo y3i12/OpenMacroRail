@@ -50,9 +50,11 @@ class ofApp : public ofBaseApp
     void doTheShootingSequence();
 
 public:
+    ///////////////
     // control vars
     int                   m_stepsMoved;
-
+    
+    ///////////////
     // arduino vars
     ofArduino	            m_arduino;
 	  bool                  m_setupArduino;
@@ -61,8 +63,8 @@ public:
     std::vector< int >    m_cameraPins;
     frmtStepperControl*   m_stepperControl;
 
+    //////////
     // UI vars
-    ofxUICanvas*          m_gui; 
 
     // stepping
     float                 m_motorInterval;
@@ -79,8 +81,12 @@ public:
     float                 m_exposureTime;
     float                 m_focusTime;
 
-    // widget
+    // misc
+    ofxUICanvas*          m_gui; 
+    ofxUILabel*           m_status;
+    ofxUIButton*          m_exitButton;
     ofxUIButton*          m_doIt;
+    bool                  m_doItTriggered;
 };
 
 #endif
