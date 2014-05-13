@@ -10,6 +10,13 @@
 
 class ofApp : public ofBaseApp
 {
+  public:
+    enum Constants
+    {
+      kFocusIndex = 0,
+      kShootIndex = 1,
+      kShootClickTime = 50,
+    };
 
 	public:
 		void setup( );
@@ -34,15 +41,46 @@ class ofApp : public ofBaseApp
     void analogPinChanged( const int &pinNum );
     void updateArduino( );
 
+    void focusAndShoot();
+    void stabilize();
+    void expose();
+    void glideToNextPosition();
+    void returnToOriginalPos();
+
+    void doTheShootingSequence();
+
 public:
-    ofxUICanvas*         m_gui; 
-	  ofArduino	           m_arduino;
-	  bool                 m_setupArduino;
-    float                m_shotNumber;
-    float                m_stepNumber;
-    std::vector< int >   m_stepperPins;
-    frmtStepperControl*  m_stepperControl;
-    std::vector< int >   m_cameraPins;
+    // control vars
+    int                   m_stepsMoved;
+
+    // arduino vars
+    ofArduino	            m_arduino;
+	  bool                  m_setupArduino;
+
+    std::vector< int >    m_stepperPins;
+    std::vector< int >    m_cameraPins;
+    frmtStepperControl*   m_stepperControl;
+
+    // UI vars
+    ofxUICanvas*          m_gui; 
+
+    // stepping
+    float                 m_motorInterval;
+    float                 m_shotNumber;
+    float                 m_stepNumber;
+    bool                  m_reverseSlicing;
+
+    // moving
+    bool                  m_movingForward;
+    bool                  m_movingBackward;
+
+    // shooting
+    float                 m_stabilizationTime;
+    float                 m_exposureTime;
+    float                 m_focusTime;
+
+    // widget
+    ofxUIButton*          m_doIt;
 };
 
 #endif
