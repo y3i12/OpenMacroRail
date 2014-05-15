@@ -15,7 +15,7 @@ I've maded 3 other prototypes of the same project and this will be the cheapest 
 #What is already ready ady y?
 By the current moment only the protoboard is complete, based on the other projects. The picture shooting triggers are compatible to CameraAxe connection and are isolated from the main circuit, as the stepper driver is also isolated and uses another power source than the Arduino.
 
-The current code only blinks some leds on a modified protoboard - I won't use movable parts to do such tests.
+I've tested it spinning the motor and shooting the camera. Soon I'll test with the full assembled temporary hardware.
 
 #Solution Flow
 The main flow is something like this:
